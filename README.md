@@ -10,6 +10,19 @@ A node module for the [W800][1] family of X10 RF receivers from [WGL & Associate
 
 node-w800 is available under the [MIT License][1].
 
+## Todo
+
+* mock out expected behavior
+* create tests
+* implement
+
+## Change Log
+
+*0.0.1 — Jan 22, 2016*
+
+* foo
+
+
   [1]: https://github.com/keithws/x10/blob/master/LICENSE
   [2]: http://www.wgldesigns.com/w800.html
   [3]: http://www.wgldesigns.com/

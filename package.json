@@ -1,0 +1,33 @@
+{
+  "name": "node-w800",
+  "version": "0.0.1",
+  "description": "A node module for the W800 family of X10 RF receivers from WGL & Associates.",
+  "main": "lib/w800.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "dependencies": {
+    "serialport": "^2.0.6",
+    "x10": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keithws/node-w800.git"
+  },
+  "keywords": [
+    "x10",
+    "rf",
+    "W800"
+  ],
+  "author": "Keith W. Shaw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/keithws/node-w800/issues"
+  },
+  "homepage": "https://github.com/keithws/node-w800#readme"
+}

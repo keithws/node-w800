@@ -7,6 +7,9 @@ var w800 = new W800Receiver("/dev/tty.usbserial-FTWU3WZ0C", function (err) {
 		console.error(err);
 		return;
 	}
+});
+
+w800.on("handshake", function () {
 	console.log("Handshake complete.");
 });
 

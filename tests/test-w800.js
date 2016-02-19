@@ -22,9 +22,7 @@ describe("Receiver", function () {
 	it("responds to a handshake request.", function (done) {
 		serialPort = new SerialPort("/path/to/fake/usb");
 		receiver = new Receiver(serialPort, function (err) {
-			if (err) {
-				console.error(err);
-			}
+		    should.not.exist(err);
 			receiver.isReady.should.equal(true);
 			done();
 		});
@@ -33,20 +31,23 @@ describe("Receiver", function () {
 		serialPort.emit("data", [0x29]);
 	});
 
-	it.skip("decodes the sampled RF stream into a stream of X10 packets", function (done) {
+	it("decodes the sampled RF stream into a stream of X10 packets", function (done) {
 		serialPort = new SerialPort("/path/to/fake/usb");
 		receiver = new Receiver(serialPort, function () {
 			receiver.isReady.should.equal(true);
-		});
-		receiver.on("data", function (data) {
-			data.should.equal([new X10Address("A16"), new X10Command("OFF")]);
-			done();
+			receiver.on("data", function (data) {
+			    should.exist(data);
+				data.should.deepEqual(new Buffer([0b00011110, 0b11100001, 0b00100110, 0b11011001]));
+				// data.should.deepEqual([new X10Address("A16"), new X10Command("OFF")]);
+				done();
+			});
 		});
 		// send 0x29 to indicate the W800 is online
 		serialPort.emit("open");
-		serialPort.emit("data", [0x29]);
+		serialPort.emit("data", new Buffer([0x29]));
 		// send A-16 OFF from the fake serial port
-		serialPort.emit("data", [0b01100100, 0b10011011, 0b01111000, 0b10000111]);
+		// the message is repeated six times when I press a remote button
+		serialPort.emit("data", new Buffer([0b01100100, 0b10011011, 0b01111000, 0b10000111]));
 	});
 });
 

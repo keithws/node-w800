@@ -4,7 +4,7 @@ var should = require("should"),
 	x10 = require("x10"),
 	X10Address = x10.Address,
 	X10Command = x10.Command,
-	Receiver = require("../w800").Receiver,
+	Receiver = require("../lib/w800").Receiver;
 
 describe("Receiver", function () {
 	var serialPort, receiver;
@@ -21,27 +21,32 @@ describe("Receiver", function () {
 
 	it("responds to a handshake request.", function (done) {
 		serialPort = new SerialPort("/path/to/fake/usb");
-		receiver = new Receiver(serialPort, function () {
+		receiver = new Receiver(serialPort, function (err) {
+			if (err) {
+				console.error(err);
+			}
 			receiver.isReady.should.equal(true);
 			done();
 		});
-		// Send a F0hex - 29hex and the module will echo back a 29hex indicating it is on line.
+		// echo back a 0x29 indicating the W800 is on line.
+		serialPort.emit("open");
 		serialPort.emit("data", [0x29]);
 	});
 
-	it("decodes the sampled RF stream into a stream of X10 packets", function (done) {
+	it.skip("decodes the sampled RF stream into a stream of X10 packets", function (done) {
 		serialPort = new SerialPort("/path/to/fake/usb");
 		receiver = new Receiver(serialPort, function () {
 			receiver.isReady.should.equal(true);
+		});
+		receiver.on("data", function (data) {
+			data.should.equal([new X10Address("A16"), new X10Command("OFF")]);
 			done();
 		});
-		receiver.on("packet", function (packet) {
-			packet.should.equal([new X10Address("A16"), new X10Function("OFF")]);
-		});
 		// send 0x29 to indicate the W800 is online
+		serialPort.emit("open");
 		serialPort.emit("data", [0x29]);
 		// send A-16 OFF from the fake serial port
-		serialPort.emit("data", [0b10101110, 0b11101110, 0b10110101, 0b10101010, 0b11110111, 0b11010101]);
+		serialPort.emit("data", [0b01100100, 0b10011011, 0b01111000, 0b10000111]);
 	});
 });
 

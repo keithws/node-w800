@@ -11,7 +11,9 @@
     "serialport": "^2.0.6",
     "x10": "^1.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "should": "^8.2.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
